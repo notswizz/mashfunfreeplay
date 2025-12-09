@@ -123,7 +123,7 @@ export function ActionsTab() {
 
   // --- Render ---
   return (
-    <div className="space-y-3 px-6 w-full max-w-md mx-auto">
+    <div className="space-y-3 px-1 w-full max-w-md mx-auto text-slate-100">
       {/* Share functionality */}
       <ShareButton
         buttonText="Share Mini App"
@@ -154,7 +154,7 @@ export function ActionsTab() {
 
       {/* Notification functionality */}
       {notificationState.sendStatus && (
-        <div className="text-sm w-full">
+        <div className="text-sm w-full text-slate-100">
           Send notification result: {notificationState.sendStatus}
         </div>
       )}
@@ -177,7 +177,7 @@ export function ActionsTab() {
 
       {/* Haptic feedback controls */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label className="block text-sm font-medium text-slate-100">
           Haptic Intensity
         </label>
         <select
@@ -187,7 +187,7 @@ export function ActionsTab() {
               e.target.value as Haptics.ImpactOccurredType
             )
           }
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary"
+          className="w-full px-3 py-2 border border-slate-700 rounded-md bg-slate-900 text-slate-50 focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value={'light'}>Light</option>
           <option value={'medium'}>Medium</option>

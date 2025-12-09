@@ -1,20 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMiniApp } from "@neynar/react";
 import { Header } from "~/components/ui/Header";
-import { Footer } from "~/components/ui/Footer";
-import { HomeTab, ActionsTab, ContextTab, WalletTab } from "~/components/ui/tabs";
-import { USE_WALLET } from "~/lib/constants";
+import { HomeTab, PastGuessesTab, AdminTab } from "~/components/ui/tabs";
 import { useNeynarUser } from "../hooks/useNeynarUser";
-
-// --- Types ---
-export enum Tab {
-  Home = "home",
-  Actions = "actions",
-  Context = "context",
-  Wallet = "wallet",
-}
 
 export interface AppProps {
   title?: string;
@@ -57,8 +47,6 @@ export default function App(
     isSDKLoaded,
     context,
     setInitialTab,
-    setActiveTab,
-    currentTab,
   } = useMiniApp();
 
   // --- Neynar user hook ---
@@ -74,7 +62,7 @@ export default function App(
    */
   useEffect(() => {
     if (isSDKLoaded) {
-      setInitialTab(Tab.Home);
+      setInitialTab("home");
     }
   }, [isSDKLoaded, setInitialTab]);
 
@@ -93,6 +81,7 @@ export default function App(
   // --- Render ---
   return (
     <div
+      className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-50 flex justify-center"
       style={{
         paddingTop: context?.client.safeAreaInsets?.top ?? 0,
         paddingBottom: context?.client.safeAreaInsets?.bottom ?? 0,
@@ -100,23 +89,69 @@ export default function App(
         paddingRight: context?.client.safeAreaInsets?.right ?? 0,
       }}
     >
-      {/* Header should be full width */}
-      <Header neynarUser={neynarUser} />
+      <div className="w-full max-w-md px-3 pb-20 pt-3">
+        <div className="rounded-3xl border border-slate-800 bg-slate-950/95 backdrop-blur-xl shadow-[0_18px_45px_rgba(0,0,0,0.85)] overflow-hidden">
+          {/* Header */}
+          <div className="px-4 pt-4 pb-3 border-b border-white/10">
+            <Header />
+          </div>
 
-      {/* Main content and footer should be centered */}
-      <div className="container py-2 pb-20">
-        {/* Main title */}
-        <h1 className="text-2xl font-bold text-center mb-4">{title}</h1>
-
-        {/* Tab content rendering */}
-        {currentTab === Tab.Home && <HomeTab />}
-        {currentTab === Tab.Actions && <ActionsTab />}
-        {currentTab === Tab.Context && <ContextTab />}
-        {currentTab === Tab.Wallet && <WalletTab />}
-
-        {/* Footer with navigation */}
-        <Footer activeTab={currentTab as Tab} setActiveTab={setActiveTab} showWallet={USE_WALLET} />
+          {/* Main content */}
+          <div className="px-4 pb-4 pt-3">
+            <TabSwitcher isAdmin={context?.user?.fid === 1441046} />
+          </div>
+        </div>
       </div>
+    </div>
+  );
+}
+
+function TabSwitcher({ isAdmin }: { isAdmin: boolean }) {
+  const [view, setView] = useState<"play" | "view" | "admin">("play");
+
+  return (
+    <div className="space-y-3">
+      <div className="inline-flex rounded-full bg-slate-900/80 border border-slate-800 p-0.5 text-xs">
+        <button
+          type="button"
+          className={`px-3 py-1.5 rounded-full ${
+            view === "play"
+              ? "bg-primary text-white shadow-sm"
+              : "text-slate-300"
+          }`}
+          onClick={() => setView("play")}
+        >
+          Play
+        </button>
+        <button
+          type="button"
+          className={`px-3 py-1.5 rounded-full ${
+            view === "view"
+              ? "bg-primary text-white shadow-sm"
+              : "text-slate-300"
+          }`}
+          onClick={() => setView("view")}
+        >
+          View
+        </button>
+        {isAdmin && (
+          <button
+            type="button"
+            className={`px-3 py-1.5 rounded-full ${
+              view === "admin"
+                ? "bg-primary text-white shadow-sm"
+                : "text-slate-300"
+            }`}
+            onClick={() => setView("admin")}
+          >
+            Admin
+          </button>
+        )}
+      </div>
+
+      {view === "play" && <HomeTab />}
+      {view === "view" && <PastGuessesTab />}
+      {view === "admin" && isAdmin && <AdminTab />}
     </div>
   );
 }
