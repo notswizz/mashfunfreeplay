@@ -40,14 +40,6 @@ export function AdminTab() {
   const [isLocking, setIsLocking] = useState(false);
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
 
-  if (fid !== 1441046) {
-    return (
-      <div className="text-xs text-slate-400">
-        Admin only. Open as FID 1441046 to manage games.
-      </div>
-    );
-  }
-
   useEffect(() => {
     const loadLock = async () => {
       try {
@@ -164,6 +156,16 @@ export function AdminTab() {
       setIsSettling(false);
     }
   };
+
+  const isAdmin = fid === 1441046;
+
+  if (!isAdmin) {
+    return (
+      <div className="text-xs text-slate-400">
+        Admin only. Open as FID 1441046 to manage games.
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-3 text-xs text-slate-100">
