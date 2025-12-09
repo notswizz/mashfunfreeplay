@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useMiniApp } from "@neynar/react";
 import { Header } from "~/components/ui/Header";
 import { HomeTab, PastGuessesTab, AdminTab } from "~/components/ui/tabs";
-import { useNeynarUser } from "../hooks/useNeynarUser";
 
 export interface AppProps {
   title?: string;
@@ -39,18 +38,9 @@ export interface AppProps {
  * <App title="My Mini App" />
  * ```
  */
-export default function App(
-  { title }: AppProps = { title: "Neynar Starter Kit" }
-) {
+export default function App(_props: AppProps = { title: "Neynar Starter Kit" }) {
   // --- Hooks ---
-  const {
-    isSDKLoaded,
-    context,
-    setInitialTab,
-  } = useMiniApp();
-
-  // --- Neynar user hook ---
-  const { user: neynarUser } = useNeynarUser(context || undefined);
+  const { isSDKLoaded, context, setInitialTab } = useMiniApp();
 
   // --- Effects ---
   /**
